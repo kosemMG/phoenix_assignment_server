@@ -42,4 +42,8 @@ exports.uploadFile = async (req, res) => {
 };
 
 exports.downloadFile = (req, res) => {
+  const { filename } = req.query;
+  const file = path.join(__dirname, '..', UPLOAD_DIR_NAME, filename);
+
+  return res.download(file);
 };
