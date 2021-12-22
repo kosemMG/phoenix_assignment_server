@@ -1,16 +1,10 @@
 const express = require('express');
 
+const filesController = require('../controllers/files');
+
 const router = express.Router();
 
-
-// Upload
-router.post('/', (req, res) => {
-
-});
-
-// Download
-router.get('/', (req, res) => {
-
-});
+router.post('/upload', filesController.onFileUpload);
+router.get('/download', filesController.onFileDownload);
 
 module.exports = router;
