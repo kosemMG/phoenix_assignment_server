@@ -26,8 +26,7 @@ exports.uploadFile = async (req, res) => {
   const filesBeforeUpload = fs.readdirSync(uploadPath);
 
   if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400)
-      .json({
+    return res.status(400).json({
         files: filesBeforeUpload,
         message: 'No files were uploaded.',
         result: 'failed'
@@ -35,7 +34,7 @@ exports.uploadFile = async (req, res) => {
   }
 
   if (filesBeforeUpload.includes(file.name)) {
-    return res.json({
+    return res.status(400).json({
       files: filesBeforeUpload,
       message: 'File with this name already exists.',
       result: 'failed'
@@ -52,7 +51,11 @@ exports.uploadFile = async (req, res) => {
 
   const files = fs.readdirSync(uploadPath);
 
-  return res.json({ files, message: 'File uploaded successfully!', result: 'succeeded' });
+  return res.json({
+    files,
+    message: 'File uploaded successfully!',
+    result: 'succeeded'
+  });
 };
 
 exports.downloadFile = (req, res) => {
