@@ -16,16 +16,30 @@ exports.getFilenames = (req, res) => {
 
 exports.uploadFile = async (req, res) => {
 
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400)
-      .json({ message: 'No files were uploaded.', result: 'failed' });
-  }
-
-  const file = req.files['file'];
   const uploadPath = path.join(__dirname, '..', UPLOAD_DIR_NAME);
 
   if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });
+  }
+
+  const file = req.files['file'];
+  const filesBeforeUpload = fs.readdirSync(uploadPath);
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400)
+      .json({
+        files: filesBeforeUpload,
+        message: 'No files were uploaded.',
+        result: 'failed'
+      });
+  }
+
+  if (filesBeforeUpload.includes(file.name)) {
+    return res.json({
+      files: filesBeforeUpload,
+      message: 'File with this name already exists.',
+      result: 'failed'
+    });
   }
 
   const uploadFilePath = path.join(uploadPath, file.name);
